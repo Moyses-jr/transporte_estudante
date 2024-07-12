@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import Router from "next/router";
 
 export default function UserRegister() {
   const [email, setEmail] = useState<String>("");
@@ -11,20 +12,21 @@ export default function UserRegister() {
     e.preventDefault();
     let name = `${nome} ${sobrenome}`;
 
-    const data = {
+    const dataForm = {
       name: name,
-      login: {
-        password: password,
-        email: email,
-      },
+      email: email,
+      password: password,
     };
 
     try {
-      const response = axios.post(
-        "http://localhost:8080/api/createStudent",
-        data
+      const { status } = await axios.post(
+        "http://localhost:8080/api/cadastro",
+        dataForm
       );
-      console.log(response);
+
+      if (status === 200) {
+        Router.push("/login");
+      }
     } catch (error) {
       console.log(error);
     }

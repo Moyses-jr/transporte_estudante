@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, FormEvent } from "react";
 import { FaUserPlus } from "react-icons/fa6";
 import Router from "next/router";
 import axios from "axios";
@@ -7,22 +7,21 @@ export default function Login() {
   const [email, setEmail] = useState<String>();
   const [password, setPassword] = useState<String>();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const dataInput = {
       email: email,
       password: password,
     };
-    console.log(dataInput);
+
     try {
       const { data, status } = await axios.post(
-        "http://localhost:8080/api/loginStudent",
+        "http://localhost:8080/api/login",
         dataInput
       );
 
-      console.log(data);
-      if (data._id && status === 201) {
-        Router.push("/");
+      if (data.token && status === 200) {
+        Router.push("/Home");
       }
     } catch (error) {
       console.log(error);
